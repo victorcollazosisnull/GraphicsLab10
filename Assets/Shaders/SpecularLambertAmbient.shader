@@ -37,8 +37,6 @@ Shader "Custom/SpecularLambertAmbient"
             float4 _SpecColor;
             float _Shininess;
 
-            // float3 _WorldSpaceCameraPos;
-
             v2f vert(appdata v)
             {
                 v2f o;
@@ -55,14 +53,11 @@ Shader "Custom/SpecularLambertAmbient"
                 float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
                 float3 viewDir = normalize(_WorldSpaceCameraPos - i.worldPos);
 
-                // Ambient
                 float3 ambient = _AmbientColor.rgb;
 
-                // Diffuse (Lambert)
                 float diff = max(0, dot(normal, lightDir));
                 float3 diffuse = _Color.rgb * diff;
 
-                // Specular (Phong)
                 float3 reflectDir = reflect(-lightDir, normal);
                 float spec = pow(max(0, dot(viewDir, reflectDir)), _Shininess);
                 float3 specular = _SpecColor.rgb * spec;

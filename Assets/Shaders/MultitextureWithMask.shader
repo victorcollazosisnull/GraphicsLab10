@@ -49,22 +49,18 @@ Shader "Custom/MultitextureWithMask"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                // Normales e iluminación
                 float3 normal = normalize(i.worldNormal);
                 float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
 
                 float NdotL = max(0, dot(normal, lightDir));
                 float3 diffuseLight = float3(NdotL, NdotL, NdotL);
 
-                // Texturas
                 fixed4 texA = tex2D(_TexA, i.uv);
                 fixed4 texB = tex2D(_TexB, i.uv);
-                fixed mask = tex2D(_MaskTex, i.uv).r; // escala de grises (canal rojo)
+                fixed mask = tex2D(_MaskTex, i.uv).r; 
 
-                // Interpolación entre A y B usando la máscara
                 float3 blendedColor = lerp(texA.rgb, texB.rgb, mask);
 
-                // Iluminación final: ambiente + difusa
                 float3 finalColor = blendedColor * diffuseLight + _AmbientColor.rgb;
 
                 return fixed4(finalColor, 1.0);

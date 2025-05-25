@@ -54,7 +54,7 @@
             fixed4 frag(v2f i) : SV_Target
             {
                 float3 normal = normalize(i.worldNormal);
-                float3 lightDir = normalize(_WorldSpaceLightPos0.xyz); // Usa la luz direccional
+                float3 lightDir = normalize(_WorldSpaceLightPos0.xyz); 
                 float3 viewDir = normalize(_WorldSpaceCameraPos - i.worldPos);
 
                 fixed4 texColor = tex2D(_MainTex, i.uv);

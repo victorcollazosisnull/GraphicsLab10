@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_ToonMultitextureWithMask
-  m_Shader: {fileID: 4800000, guid: e9bd4b373095098418331cf311d09fd5, type: 3}
+  m_Name: Custom_ToonMultiTextureCel
+  m_Shader: {fileID: 4800000, guid: 8c76031da3dc4984badff08f6778cd91, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -36,10 +36,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats:
-    - _ToonLevels: 4.13
+    m_Floats: []
     m_Colors:
-    - _AmbientColor: {r: 0.9056604, g: 0.22142947, b: 0, a: 1}
-    - _Thresholds: {r: 0.86, g: 0.58, b: 0.12, a: 0}
+    - _AmbientColor: {r: 0.00886603, g: 0.0070754588, b: 0.5, a: 1}
+    - _Color: {r: 0.4761481, g: 0.9433962, b: 0.8007584, a: 1}
+    - _Thresholds: {r: 0.9, g: 0.5, b: 0.17, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -1,12 +1,13 @@
-Shader "Custom/ToonMultitextureWithMask"
+Shader "Custom/ToonMultiTextureCel"
 {
     Properties
     {
         _TexA ("Textura A", 2D) = "white" {}
         _TexB ("Textura B", 2D) = "white" {}
         _MaskTex ("Máscara (Escala de Grises)", 2D) = "gray" {}
+        _Color ("Color Base", Color) = (1,1,1,1)
         _AmbientColor ("Luz Ambiental", Color) = (0.2, 0.2, 0.2, 1)
-        _ToonLevels ("Niveles Toon", Range(1,5)) = 3
+        _Thresholds ("Umbrales de luz", Vector) = (0.95, 0.5, 0.2, 0)
     }
 
     SubShader
@@ -23,8 +24,9 @@ Shader "Custom/ToonMultitextureWithMask"
             sampler2D _TexA;
             sampler2D _TexB;
             sampler2D _MaskTex;
+            float4 _Color;
             float4 _AmbientColor;
-            float _ToonLevels;
+            float4 _Thresholds;
 
             struct appdata
             {
@@ -51,25 +53,28 @@ Shader "Custom/ToonMultitextureWithMask"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                // Iluminación
                 float3 normal = normalize(i.worldNormal);
                 float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
                 float NdotL = max(0, dot(normal, lightDir));
 
-                // Toon shading por niveles
-                float shade = floor(NdotL * _ToonLevels) / (_ToonLevels - 1);
+                float shade = 0.0;
+                if (NdotL > _Thresholds.x)
+                    shade = 1.0;
+                else if (NdotL > _Thresholds.y)
+                    shade = 0.7;
+                else if (NdotL > _Thresholds.z)
+                    shade = 0.4;
+                else
+                    shade = 0.2;
 
-                // Texturas y mezcla con máscara
                 float4 texA = tex2D(_TexA, i.uv);
                 float4 texB = tex2D(_TexB, i.uv);
-                float mask = tex2D(_MaskTex, i.uv).r; // canal rojo para gris
-
+                float mask = tex2D(_MaskTex, i.uv).r;
                 float3 baseColor = lerp(texA.rgb, texB.rgb, mask);
 
-                // Color final con toon y ambiente
-                float3 finalColor = baseColor * shade + _AmbientColor.rgb;
+                float3 toonColor = baseColor * shade + _AmbientColor.rgb;
 
-                return fixed4(finalColor, 1.0);
+                return fixed4(toonColor * _Color.rgb, _Color.a);
             }
 
             ENDCG

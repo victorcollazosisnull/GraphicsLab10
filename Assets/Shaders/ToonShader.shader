@@ -4,7 +4,7 @@ Shader "Custom/ToonShader"
     {
         _Color ("Color Base", Color) = (1,1,1,1)
         _AmbientColor ("Luz Ambiental", Color) = (0.2,0.2,0.2,1)
-        _ToonLevels ("Niveles de Sombra", Range(1,5)) = 3
+        _Thresholds ("Umbrales de luz", Vector) = (0.95, 0.5, 0.2, 0)
     }
 
     SubShader
@@ -20,7 +20,7 @@ Shader "Custom/ToonShader"
 
             float4 _Color;
             float4 _AmbientColor;
-            float _ToonLevels;
+            float4 _Thresholds;
 
             struct appdata
             {
@@ -48,9 +48,16 @@ Shader "Custom/ToonShader"
                 float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
 
                 float NdotL = max(0, dot(normal, lightDir));
+                float shade = 0.0;
 
-                // Toon shading escalonado
-                float shade = floor(NdotL * _ToonLevels) / (_ToonLevels - 1);
+                if (NdotL > _Thresholds.x)
+                    shade = 1.0;
+                else if (NdotL > _Thresholds.y)
+                    shade = 0.7;
+                else if (NdotL > _Thresholds.z)
+                    shade = 0.4;
+                else
+                    shade = 0.2;
 
                 float3 toonColor = _Color.rgb * shade + _AmbientColor.rgb;
 
